@@ -1,24 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import { useReducer } from 'react';
+import { ContainerWrapper } from './components/ContainerWrapper';
+import Options from './components/Home/Options';
+import OptionContext from './helpers/OptionContext';
+import { optionReducer } from './helpers/OptionReducer';
+import GameStart from './components/Play/GameStart';
+import About from './components/About/About'
 
 function App() {
+  const [optionState, optionDispatch] = useReducer(optionReducer, null)
+  const providerState = {
+    optionState,
+    optionDispatch
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <OptionContext.Provider value={providerState}>
+      <ContainerWrapper>
+        {!optionState &&
+          <Options />
+        }
+        {optionState === 1 &&
+          <GameStart />
+        }
+        {optionState === 2 &&
+          <About />
+        }
+      </ContainerWrapper>
+    </OptionContext.Provider>
   );
 }
 
